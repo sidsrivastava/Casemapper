@@ -132,8 +132,6 @@ class Keymap:
     self.dumpStataCommandsListAllFeatures(stataDir + '/features_all.txt', caselist)
     self.dumpStataCommandsListsFeaturesByGroup(stataDir + '/features_groups.txt', caselist)
     self.dumpStataCommandsTabstatFeatures(stataDir + '/features_tabstat.txt', caselist)
-    self.dumpStataCommandsTabFeatures(stataDir + '/features_tab.txt', caselist)
-    self.dumpStataCommandsEtcFeatures(stataDir + '/features_sid.txt', caselist)
 
   def dumpStataCommandsListAllFeatures(self, stataCommandsPath, caselist):
     keyCount = 0
@@ -202,21 +200,21 @@ class Keymap:
     stataCommandsFile.close()
     print 'Dumped stata groups commands (tabstat) to "' +  stataCommandsPath + '"'
 
-  def dumpStataCommandsTabFeatures(self, stataCommandsPath, caselist):
-    stataCommandsFile = open(stataCommandsPath, 'w')
-    allKeys = caselist.getAllKeys()
-
-    for group in self.groups:
-     if group.name not in ignorableGroups:
-        stataCommandsFile.write('******** ' + group.name + ' ********\n')
-        for label, keys in group.subgroups.iteritems():
-          stataCommandsFile.write('**** ' + label + ' ****\n') 
-		  # stataCommandsFile.write('local ' + stataizeVariable(label) + ' ')
-          for key in keys:
-            if (key in allKeys) and (key not in nonnumericKeys):
-              stataCommandsFile.write('bysort protein_change: tab ' + stataizeVariable(key) + ' if ' + stataizeVariable(key) + ' != -1' + '\n')
-          stataCommandsFile.write('\n\n')
-        stataCommandsFile.write('\n')
-
-    stataCommandsFile.close()
-    print 'Dumped stata commands (sum) to "' +  stataCommandsPath + '"'
+#  def dumpStataCommandsTabFeatures(self, stataCommandsPath, caselist):
+#    stataCommandsFile = open(stataCommandsPath, 'w')
+#    allKeys = caselist.getAllKeys()
+#
+#    for group in self.groups:
+#     if group.name not in ignorableGroups:
+#        stataCommandsFile.write('******** ' + group.name + ' ********\n')
+#        for label, keys in group.subgroups.iteritems():
+#          stataCommandsFile.write('**** ' + label + ' ****\n') 
+#		  # stataCommandsFile.write('local ' + stataizeVariable(label) + ' ')
+#          for key in keys:
+#            if (key in allKeys) and (key not in nonnumericKeys):
+#              stataCommandsFile.write('bysort protein_change: tab ' + stataizeVariable(key) + ' if ' + stataizeVariable(key) + ' != -1' + '\n')
+#          stataCommandsFile.write('\n\n')
+#        stataCommandsFile.write('\n')
+#
+#    stataCommandsFile.close()
+#    print 'Dumped stata commands (sum) to "' +  stataCommandsPath + '"'

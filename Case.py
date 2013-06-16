@@ -27,7 +27,7 @@ import logging
 from utilities import *
 
 internalKeys = ['id']
-commonKeys = ['paper', 'sex', 'age', 'mutation', 'protein change']
+commonKeys = ['paper', 'sex', 'age', 'syndrome', 'mutation', 'protein change']
 defaultUnits = {'age':'y'}
 
 # log

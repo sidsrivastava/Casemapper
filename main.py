@@ -129,8 +129,6 @@ def main(argv = None):
           keymap.dumpExcelData(argument, caselist)
 
         #### etc ####
-
-        caselist.explore()
 		
     except getopt.error, message:
        raise Usage(message)
