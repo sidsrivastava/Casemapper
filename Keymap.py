@@ -24,9 +24,7 @@
 
 from utilities import *
 from OrderedDict import OrderedDict
-
-ignorableGroups = ['identifier', 'demographics', 'genetics', 'growth']
-nonnumericKeys = ['ID severity']
+import Config
 
 class KeymapGroup:
   def __init__(self, name):
@@ -102,12 +100,12 @@ class Keymap:
     excelDataFile.write("\n\n")
 
     for group in self.groups:
-     if group.name not in ignorableGroups:
+     if group.name not in Config.ignorableGroups:
         excelDataFile.write('******** ' + group.name + ' ********\n')
         for label, keys in group.subgroups.iteritems():
           excelDataFile.write('**** ' + label + ' ****\n') 
           for key in keys:
-            if (key in allKeys) and (key not in nonnumericKeys):
+            if (key in allKeys) and (key not in Config.nonnumericKeys):
               excelDataFile.write(key + "\t")
               for proteinChange in proteinChangeUniqueValues:
                 cases = caselist.getCasesByKeyValueSecondKey("protein change", proteinChange, key)
@@ -140,9 +138,9 @@ class Keymap:
 
     stataCommandsFile.write('local all_features ')
     for group in self.groups:
-      if group.name not in ignorableGroups:
+      if group.name not in Config.ignorableGroups:
         for key in group.getAllKeys():
-          if (key in allKeys) and (key not in nonnumericKeys):
+          if (key in allKeys) and (key not in Config.nonnumericKeys):
             stataCommandsFile.write(stataizeVariable(key) + ' ')
             keyCount = keyCount + 1
 
@@ -154,12 +152,12 @@ class Keymap:
     allKeys = caselist.getAllKeys()
 
     for group in self.groups:
-     if group.name not in ignorableGroups:
+     if group.name not in Config.ignorableGroups:
         stataCommandsFile.write('**** ' + group.name + ' ****\n')
         for label, keys in group.subgroups.iteritems():
           stataCommandsFile.write('local ' + stataizeVariable(label) + ' ')
           for key in keys:
-            if (key in allKeys) and (key not in nonnumericKeys):
+            if (key in allKeys) and (key not in Config.nonnumericKeys):
               stataCommandsFile.write(stataizeVariable(key) + ' ')
           stataCommandsFile.write('\n')
         stataCommandsFile.write('\n')
@@ -173,27 +171,27 @@ class Keymap:
 
     # features by group
     for group in self.groups:
-      if group.name not in ignorableGroups:
+      if group.name not in Config.ignorableGroups:
         stataCommandsFile.write('**** ' + group.name + ' ****\n')
         stataCommandsFile.write('tabstat ')
         print 'Sorting keys in "' + group.name + '"...'
         groupKeys = caselist.getKeysSortedByMeans(group.getAllKeys())
         for key in groupKeys:
-          if (key in allKeys) and (key not in nonnumericKeys):
+          if (key in allKeys) and (key not in Config.nonnumericKeys):
             stataCommandsFile.write(stataizeVariable(key) + ' ')
         stataCommandsFile.write('\n\n')
 
 
     # features by group and subroup
 #    for group in self.groups:
-#     if group.name not in ignorableGroups:
+#     if group.name not in Config.ignorableGroups:
 #        stataCommandsFile.write('**** ' + group.name + ' ****\n')
 #        for label, keys in group.subgroups.iteritems():
 #          stataCommandsFile.write('tabstat ')
 #          print 'Sorting keys in "' + label + '"...'
 #          subgroupKeys = caselist.getKeysSortedByMeans(keys)
 #          for key in subgroupKeys:
-#            if (key in allKeys) and (key not in nonnumericKeys):
+#            if (key in allKeys) and (key not in Config.nonnumericKeys):
 #              stataCommandsFile.write(stataizeVariable(key) + ' ')
 #          stataCommandsFile.write('\n')'''
 
@@ -205,13 +203,13 @@ class Keymap:
 #    allKeys = caselist.getAllKeys()
 #
 #    for group in self.groups:
-#     if group.name not in ignorableGroups:
+#     if group.name not in Config.ignorableGroups:
 #        stataCommandsFile.write('******** ' + group.name + ' ********\n')
 #        for label, keys in group.subgroups.iteritems():
 #          stataCommandsFile.write('**** ' + label + ' ****\n') 
 #		  # stataCommandsFile.write('local ' + stataizeVariable(label) + ' ')
 #          for key in keys:
-#            if (key in allKeys) and (key not in nonnumericKeys):
+#            if (key in allKeys) and (key not in Config.nonnumericKeys):
 #              stataCommandsFile.write('bysort protein_change: tab ' + stataizeVariable(key) + ' if ' + stataizeVariable(key) + ' != -1' + '\n')
 #          stataCommandsFile.write('\n\n')
 #        stataCommandsFile.write('\n')

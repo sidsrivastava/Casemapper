@@ -25,9 +25,8 @@
 import operator
 import logging
 from utilities import *
+import Config
 
-internalKeys = ['id']
-commonKeys = ['paper', 'sex', 'age', 'syndrome', 'mutation', 'protein change']
 defaultUnits = {'age':'y'}
 
 # log
@@ -91,7 +90,7 @@ class Case:
   def save(self):
     caseFile = open(self.path, 'w')
     # write common keys
-    for key in commonKeys:
+    for key in Config.commonKeys:
       if key in self.data.keys():
         caseFile.write(key + ': ' + str(self.data[key]))
         # add in units where appropriate
@@ -128,7 +127,7 @@ class Case:
 
     # write remaining elements
     for key, value in self.data.iteritems():
-      if (not key in commonKeys) and (not key in self.existingConditions) and (not key in self.nonexistingConditions) and (not key in internalKeys) and (not key in self.untransformedData.keys()):
+      if (not key in Config.commonKeys) and (not key in self.existingConditions) and (not key in self.nonexistingConditions) and (not key in Config.internalKeys) and (not key in self.untransformedData.keys()):
         caseFile.write(key + ': ' + str(value))
         # add in units where appropriate
         if key in defaultUnits.keys(): caseFile.write(defaultUnits[key])

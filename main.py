@@ -33,23 +33,26 @@ from Manifest import Manifest
 from Log import Log
 from Keymap import Keymap 
 
+import Config
+
 __doc__ = '''Parses case file descriptions.
 Syntax: python main.py [options] <manifestPath>  OR
         python main.py [options] <casesDir>
 
   required:
    -i <casesDir> or <manifestPath>
+   -s <configFile>
 
   load:
    -l <keymapFile>		load keymap
 
   search/replace:
-   -S '<key>':'<value>'		search by key:value pair
-   -r '<oldKey>:<newKey>'	substitute old key with new key
+   -S '<key>':'<value>'			search by key:value pair
+   -r '<oldKey>:<newKey>'		substitute old key with new key
    -R '<keySubstitutionFile>	substitute old keys with new keys from file
 
   dump:
-   -c				dump cases (save)
+   -c					dump cases (save)
    -m <keysFile>		dump grouped keys
    -d <stataDir>		dump stata files
    -v <stataDir>		dump stata commands
@@ -65,7 +68,7 @@ def main(argv = None):
     argv = sys.argv
   try:
     try:
-      options, arguments = getopt.getopt(argv[1:], "i:l:S:r:R:cm:d:v:e:")
+      options, arguments = getopt.getopt(argv[1:], "i:z:l:S:r:R:cm:d:v:e:")
 
       caselist = Caselist()
       manifest = Manifest()
@@ -75,7 +78,7 @@ def main(argv = None):
       log = logging.getLogger('process')
       log.setLevel(logging.INFO)
       log.addHandler(logging.StreamHandler())
-
+	  
       # process options
       for option, argument in options:
         if option in ("-h", "--help"):
@@ -89,6 +92,13 @@ def main(argv = None):
             caselist.loadCasesFromDir(argument)
           else:
             print "Error: case files not loaded."
+            sys.exit(0)
+
+        if option in ("-z", "--config"):
+          if os.path.isfile(argument):
+            Config.load(argument)
+          else:
+            print "Error: config file not loaded."
             sys.exit(0)
 
         #### load ####
@@ -129,6 +139,8 @@ def main(argv = None):
           keymap.dumpExcelData(argument, caselist)
 
         #### etc ####
+
+        # caselist.explore()
 		
     except getopt.error, message:
        raise Usage(message)
