@@ -28,12 +28,14 @@ ignorableGroups = []
 nonnumericKeys = []
 internalKeys = []
 commonKeys = []
+subjectKey = ""
 
 def load(path):
   global ignorableGroups
   global nonnumericKeys
   global internalKeys
   global commonKeys
+  global subjectKey
 
   # open config file
   parser = ConfigParser.ConfigParser()
@@ -43,6 +45,7 @@ def load(path):
   internalKeys = [x.strip() for x in parser.get("Cases", "internalKeys").split(',')]
   commonKeys = [x.strip() for x in parser.get("Cases", "commonKeys").split(',')]
   nonnumericKeys = [x.strip() for x in parser.get("Cases", "nonnumericKeys").split(',')]
+  subjectKey = parser.get("Cases", "subjectKey") 
   
 #  internalKeys = ['id']
 #  commonKeys = ['paper', 'sex', 'age', 'syndrome']

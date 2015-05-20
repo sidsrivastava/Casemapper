@@ -87,16 +87,15 @@ class Keymap:
     self.dumpExcelDataFeatures(excelDir + '/features.txt', caselist)
 
   def dumpExcelDataFeatures(self, excelDataPath, caselist):
+
     excelDataFile = open(excelDataPath, 'w')
     allKeys = caselist.getAllKeys()
-
-    # get unique values for "protein change"
-    proteinChangeUniqueValues = caselist.getUniqueValuesByKey("protein change")
+    homogenizedCases = caselist.getHomogenizedCases()
 
     # write header
-    excelDataFile.write("Feature" + "\t")
-    for a in proteinChangeUniqueValues:
-      excelDataFile.write(a + "\t")
+    excelDataFile.write("Subject" + "\t")
+    for case in homogenizedCases:
+      excelDataFile.write(case.data[Config.subjectKey] + "\t")
     excelDataFile.write("\n\n")
 
     for group in self.groups:
@@ -107,15 +106,8 @@ class Keymap:
           for key in keys:
             if (key in allKeys) and (key not in Config.nonnumericKeys):
               excelDataFile.write(key + "\t")
-              for proteinChange in proteinChangeUniqueValues:
-                cases = caselist.getCasesByKeyValueSecondKey("protein change", proteinChange, key)
-                totalNumberCases = len(cases)
-                positiveNumberCases = 0
-                for case in cases:
-                  if case.data[key] == "1":
-                    positiveNumberCases = positiveNumberCases + 1
-
-                excelDataFile.write(str(positiveNumberCases) + '/' + str(totalNumberCases))
+              for case in homogenizedCases:
+                excelDataFile.write(str(case.data[key]))
                 excelDataFile.write('\t')
               excelDataFile.write('\n')
           excelDataFile.write('\n')
@@ -123,7 +115,7 @@ class Keymap:
 
     excelDataFile.close()
     print 'Dumped stata commands (sum) to "' +  excelDataPath + '"'
-	
+
   #### dump stata ####
 
   def dumpStataCommands(self, stataDir, caselist):
@@ -216,3 +208,41 @@ class Keymap:
 #
 #    stataCommandsFile.close()
 #    print 'Dumped stata commands (sum) to "' +  stataCommandsPath + '"'
+
+
+#  def dumpExcelDataFeaturesDifferentVersion(self, excelDataPath, caselist):
+#    excelDataFile = open(excelDataPath, 'w')
+#    allKeys = caselist.getAllKeys()
+
+    # get unique values for "protein change"
+#    proteinChangeUniqueValues = caselist.getUniqueValuesByKey("protein change")
+
+    # write header
+#    excelDataFile.write("Feature" + "\t")
+#    for a in proteinChangeUniqueValues:
+#      excelDataFile.write(a + "\t")
+#    excelDataFile.write("\n\n")
+
+#    for group in self.groups:
+#     if group.name not in Config.ignorableGroups:
+#        excelDataFile.write('******** ' + group.name + ' ********\n')
+#        for label, keys in group.subgroups.iteritems():
+#          excelDataFile.write('**** ' + label + ' ****\n') 
+#          for key in keys:
+#            if (key in allKeys) and (key not in Config.nonnumericKeys):
+#              excelDataFile.write(key + "\t")
+#              for proteinChange in proteinChangeUniqueValues:
+#                cases = caselist.getCasesByKeyValueSecondKey("protein change", proteinChange, key)
+#                totalNumberCases = len(cases)
+#                positiveNumberCases = 0
+#                for case in cases:
+#                  if case.data[key] == "1":
+#                    positiveNumberCases = positiveNumberCases + 1
+#
+#                excelDataFile.write(str(positiveNumberCases) + '/' + str(totalNumberCases))
+#                excelDataFile.write('\t')
+#              excelDataFile.write('\n')
+#          excelDataFile.write('\n')
+#
+#    excelDataFile.close()
+#    print 'Dumped stata commands (sum) to "' +  excelDataPath + '"'
